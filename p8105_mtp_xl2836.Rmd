@@ -88,8 +88,7 @@ add_time_plot =
 iso_time_plot + add_time_plot
 ```
 
-Two plots above show how day of week affects activity in isolation and in addition to the effect of time. As we can find in the left plot, this participant's total counts are more concentrate around 300-400 from Monday to Thursday. This implies he have same activity pattern in these days. According to the right plot,  we cand find that the total counts of Sunday, Friday and Saturday change a lot in different weeks, which matches the left plot.
-
+Two plots above show how day of week affects activity in isolation and in addition to the effect of time. As we can find in the left plot, this participant's total counts are more concentrate around 300-400 from Monday to Thursday. This implies he has similar activity pattern in these days. According to the right plot,  we can find that the total counts of Sunday, Friday and Saturday change a lot in different weeks, which matches the left plot.
 
 ## Analyze 24-hour activity
 
@@ -106,11 +105,11 @@ mtp_tidy_data %>%
   scale_y_continuous(
   breaks = c(0, 480, 960, 1440), 
   labels = c("0", "8", "16", "24")) +
-  labs(title = "24-Hour Activity Profile for each day") +
+  labs(title = "24-Hour Activity Profile for Each Day") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-Through taking log of `counts`, we can get degree of `counts`. Assuming the participant doesn't move when `counts` equals one, we can know when the participant is active by filtering out "non-active observations" and draw a scatter plot. Points in each column show when the participant is active in that day of that week, and the color show the degree of activity. 
+Through taking log of `counts`, we can get degree of activity counts. Assuming the participant doesn't move when `counts` equals one, we can know when the participant is active by filtering out "non-active observations" and draw a scatter plot. Points in each column show when the participant is active in that day of that week, and the color show the degree of activity counts. 
 
 ```{r}
 mtp_tidy_data %>% 
@@ -134,9 +133,13 @@ By comparing two plot in this part, we can find although day of week has little 
 
 ## Other interesting things
 
-According to the plot of "24-hour activity profile for each day", we can find in several day, there is almost no points. It implies the participant have no activity in that day, which makes no sense. So it might caused by not wearing the accelerometerdevice. We can also find that this "lost-point situation" is less common over time, which implies the participant is used to wear that device.
+### Time of wearing device
 
-```{r, include = FALSE}
+According to the plot of "24-Hour Activity Profile for Each Day", we can find in several day, there is almost no points. It implies the participant have no activity in that day, which makes no sense. So it might be caused by not wearing the accelerometerdevice. We can also find that this "lost-point situation" is less common over time, which implies the participant became accustomed to the device.
+
+### Distribution of activity counts
+
+```{r, eval = FALSE}
 mtp_tidy_data %>% 
   filter(counts != 1 & counts < 2000) %>% 
   ggplot(aes(x = counts)) +
@@ -152,9 +155,11 @@ count_density_data =
   group_by(counts) %>% 
   summarise(n = n()) %>% 
   arrange(desc(n))
+
+head(count_density_data)
 ```
 
-If we draw a plot about the density of counts bigger than 1 and smaller than 2000, we can find the maximum of curve is around 10, which might implies the voltage signals cauesed by daily life activity is around 10.
+If we draw a plot about the density of counts bigger than 1 and smaller than 2000 or count the number of these counts, we can find counts around 10 are more common, which might implies the voltage signals cauesed by daily life activity is around 10.
 
 ```{r, include = FALSE}
 wordcountaddin::text_stats("p8105_mtp_xl2836.Rmd")
