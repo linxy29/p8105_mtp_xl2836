@@ -131,3 +131,31 @@ mtp_tidy_data %>%
 According to the plot above, we can find that the participant was more active in Sunday and everyday through 8am to 4pm.
 
 By comparing two plot in this part, we can find although day of week has little influence on whether the participant is active or not, it influences the activity degree.
+
+## Other interesting things
+
+According to the plot of "24-hour activity profile for each day", we can find in several day, there is almost no points. It implies the participant have no activity in that day, which makes no sense. So it might caused by not wearing the accelerometerdevice. We can also find that this "lost-point situation" is less common over time, which implies the participant is used to wear that device.
+
+```{r, include = FALSE}
+mtp_tidy_data %>% 
+  filter(counts != 1 & counts < 2000) %>% 
+  ggplot(aes(x = counts)) +
+  geom_density() +
+  labs(title = "Distribution of Counts(1,2000)") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r}
+count_density_data =
+  mtp_tidy_data %>% 
+  filter(counts != 1 & counts < 2000) %>% 
+  group_by(counts) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n))
+```
+
+If we draw a plot about the density of counts bigger than 1 and smaller than 2000, we can find the maximum of curve is around 10, which might implies the voltage signals cauesed by daily life activity is around 10.
+
+```{r, include = FALSE}
+wordcountaddin::text_stats("p8105_mtp_xl2836.Rmd")
+```
