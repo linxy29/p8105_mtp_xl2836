@@ -16,7 +16,7 @@ library(tidyverse)
 library(patchwork)
 
 knitr::opts_chunk$set(
-  fig.width = 8,
+  fig.width = 10,
   fig.asp = 0.8,
   out.width = "100%"
 )
@@ -131,11 +131,11 @@ According to the plot above, we can find that the participant was more active in
 
 By comparing two plot in this part, we can find although day of week has little influence on whether the participant is active or not, it influences the activity degree.
 
-## Other interesting things
+## Other exploratory analyses
 
 ### Time of wearing device
 
-According to the plot of "24-Hour Activity Profile for Each Day", we can find in several day, there is almost no points. It implies the participant have no activity in that day, which makes no sense. So it might be caused by not wearing the accelerometerdevice. We can also find that this "lost-point situation" is less common over time, which implies the participant became accustomed to the device.
+According to the plot of "24-Hour Activity Profile for Each Day", we can find in several day, there are almost no points. It implies the participant have no activity in that day, which makes no sense. So it might be caused by not wearing the accelerometerdevice. We can also find that this "lost-point situation" is less common over time, which implies the participant became accustomed to the device.
 
 ### Distribution of activity counts
 
