@@ -42,3 +42,50 @@ head(mtp_tidy_data)
 ```
 
 In the tidied dataset, there are `r nrow(mtp_tidy_data)` observations and `r ncol(mtp_tidy_data)` variables including `week`, `day`, `epoch` and `counts`.
+
+# Analyze data
+
+## Analyze the total activity variable
+
+In this part, we analyze data by using total activity counts of a single day.
+
+```{r}
+total_count_data =
+  mtp_tidy_data %>% 
+  group_by(week, day) %>% 
+  summarise(total_count = sum(counts)) %>% 
+  mutate(total_count = total_count*0.001)
+
+head(total_count_data)
+```
+
+```{r}
+total_count_data %>% 
+  ggplot(aes(x = week, y = total_count)) +
+  geom_point() +
+  geom_smooth() +
+  labs(title = "Change of Total Activity Counts over Time") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+According to the picture, we can find that even though points which represent total activity in each day are discrete, when we apply them to local regression, we can get an almost non-decreasing line, which means this participant became more active over time and the hypothesis is true.
+
+```{r}
+iso_time_plot = 
+  total_count_data %>% 
+  ggplot(aes(x = total_count, fill = day, color = day)) +
+  geom_density() +
+  facet_grid(day~.) +
+  theme(legend.position = "none") +
+  labs(title = "Distribution of Total Activity Counts of Day")
+
+add_time_plot = 
+  total_count_data %>% 
+  ggplot(aes(x = week, y = total_count)) +
+  geom_smooth(aes(color = day), se = FALSE) +
+  labs(title = "Distribution of Total Activity Counts over time")
+
+iso_time_plot + add_time_plot
+```
+
+Two plots above show how day of week affects activity in isolation and in addition to the effect of time. As we can find in the left plot, this participant's total counts are more concentrate around 300-400 from Monday to Thursday. This implies he or she have same activity pattern in these days. According to the right plot,  we cand find that the total counts of Sunday, Friday and Saturday change a lot in different weeks, which matches the left plot.
