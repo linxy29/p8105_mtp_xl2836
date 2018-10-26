@@ -5,26 +5,40 @@ date: "10/25/2018"
 output: github_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+This report is based on data collected from a accelerometerdevice which was worn by 63 year-old male with BMI 25, who was admitted to the Advanced Cardiac Care Center of Columbia University Medical Center and diagnosed with congestive heart failure (CHF)  for several months. It aims to show the participant's pattern of physical activity over long periods of time.
+
+# Import and tidy data
+
+##Import data
+
+```{r}
+library(tidyverse)
+library(patchwork)
+
+knitr::opts_chunk$set(
+  fig.width = 8,
+  fig.asp = 0.8,
+  out.width = "100%"
+)
+theme_set(theme_bw())
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+mtp_data = read_csv(file = "./data/p8105_mtp_data.csv")
 ```
 
-## Including Plots
+##Tidy data
 
-You can also embed plots, for example:
+```{r}
+mtp_tidy_data =
+  mtp_data %>% 
+  janitor::clean_names() %>% 
+  gather(key = "epoch", value = "counts", activity_1:activity_1440) %>% 
+  mutate(counts = round(counts)) %>% 
+  mutate(day = forcats::fct_relevel(day, c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))) %>% 
+  mutate(epoch = as.numeric(str_replace(epoch, "activity_", "")))
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+head(mtp_tidy_data)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+In the tidied dataset, there are `r nrow(mtp_tidy_data)` observations and `r ncol(mtp_tidy_data)` variables including `week`, `day`, `epoch` and `counts`.
